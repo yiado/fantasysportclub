@@ -19,15 +19,15 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with: 
-          aws-region: ${{ secrets.S3_BUCKET_REGION }}
-          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT }}:role/role-fantasysportclub
+          aws-region: ${{ env.S3_BUCKET_REGION }}
+          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT }}:role/role-fantasysportclub
           role-session-name: GithubSession
       
       - name: check login
         run: aws sts get-caller-identity
 
       - name: Upload to S3
-        run: aws s3 sync ./index.html s3://${{ secrets.S3_BUCKET }} --delete
+        run: aws s3 sync ./index.html s3://${{ env.S3_BUCKET }} --delete
 
 
         
