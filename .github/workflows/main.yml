@@ -1,0 +1,31 @@
+name: 'Main deploy integración github - s3'
+
+on:
+  push:
+    branches:
+      - main
+#oidc encima de oauth 2.0
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: ${{ secrets.S3_BUCKET_REGION }}
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT }}:role/role-fantasysportclub
+          role-session-name: GithubSession # OIDC
+
+      - name: Check login
+        run: aws sts get-caller-identity
+
+      - name: Upload to S3
+        run: aws s3 sync ./index.html s3://${{ secrets.S3_BUCKET }} --delete
+        
