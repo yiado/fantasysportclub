@@ -1,4 +1,4 @@
-name: 'Build and Test Vue app'
+name: 'Main deploy integración github - s3'
 
 on:
   push:
